@@ -34,7 +34,10 @@ public final class Environment {
     public String host="localhost";
     public int port = 4011;
     public String robotID="r0";
-    public Creature c = null;
+    public Creature cDefault = null;
+    public Creature cDefault2 = null;
+    public Creature cJSoar1 = null;
+    public Creature cJSoar2 = null;
     
     public Environment() {
           WS3DProxy proxy = new WS3DProxy();
@@ -44,13 +47,26 @@ public final class Environment {
              World.createFood(0, 350, 75);
              World.createFood(0, 100, 220);
              World.createFood(0, 250, 210);
-             c = proxy.createCreature(100,450,0,0);
-             c.start();
+             cDefault = proxy.createCreature(100,450,0,0);
+             cDefault.start();
+             
+             cDefault2 = proxy.createCreature(450,100,0,0);
+             cDefault2.start();
+             
+             cJSoar1 = proxy.createCreature(10,10,0,0);
+             cJSoar1.start();
+             
+             cJSoar2 = proxy.createCreature(550,550,0,0);
+             cJSoar2.start();
+             
              grow(w,7);
           } catch (CommandExecException e) {
               
           }
-          System.out.println("Robot "+c.getName()+" is ready to go.");
+          System.out.println("Robot "+cDefault.getName()+" is ready to go.");
+          System.out.println("Robot "+cDefault2.getName()+" is ready to go.");
+          System.out.println("Robot "+cJSoar1.getName()+" is ready to go.");
+          System.out.println("Robot "+cJSoar2.getName()+" is ready to go.");
 	}
     
     public synchronized void grow(World w, int time) {

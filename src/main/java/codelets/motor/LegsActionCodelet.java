@@ -89,7 +89,7 @@ public class LegsActionCodelet extends Codelet{
 					    double targetx=command.getDouble("X");
 					    double targety=command.getDouble("Y");
 					    if (!comm.equals(previousLegsAction))
-                                                log.info("Sending move command to agent: ["+targetx+","+targety+"]");
+                                                log.info("Sending move command to agent "+ c.getName()+" : ["+targetx+","+targety+"]");
                                             try {
                                                  c.moveto(speed, targetx, targety);
                                             } catch(Exception e) {

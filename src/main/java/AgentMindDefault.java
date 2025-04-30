@@ -30,23 +30,25 @@ import codelets.perception.AppleDetector;
 import codelets.perception.ClosestAppleDetector;
 import codelets.sensors.InnerSense;
 import codelets.sensors.Vision;
-import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import ws3dproxy.model.Creature;
 import ws3dproxy.model.Thing;
 /**
  *
  * @author rgudwin
  */
-public class AgentMind extends Mind {
+public class AgentMindDefault extends Mind {
     
     private static int creatureBasicSpeed=3;
     private static int reachDistance=50;
     public ArrayList<Codelet> behavioralCodelets = new ArrayList<Codelet>();
+    public String name;
     
-    public AgentMind(Environment env) {
+    public AgentMindDefault(Creature creature, String name) {
                 super();
+                this.name = name;
                 
                 // Create CodeletGroups and MemoryGroups for organizing Codelets and Memories
                 createCodeletGroup("Sensory");
@@ -71,25 +73,25 @@ public class AgentMind extends Mind {
 		handsMO=createMemoryObject("HANDS", "");
                 registerMemory(handsMO,"Motor");
                 List<Thing> vision_list = Collections.synchronizedList(new ArrayList<Thing>());
-		visionMO=createMemoryObject("VISION",vision_list);
+		visionMO=createMemoryObject("VISION_MO",vision_list);
                 registerMemory(visionMO,"Sensory");
                 //CreatureInnerSense cis = new CreatureInnerSense();
-                Idea cis = Idea.createIdea("cis","", Idea.guessType("AbstractObject",null,1.0,0.5));
-                cis.add(Idea.createIdea("cis.pitch", 0D, Idea.guessType("Property", null,1.0,0.5)));
-                cis.add(Idea.createIdea("cis.fuel", 0D, Idea.guessType("Property", null,1.0,0.5)));
-                Idea position = Idea.createIdea("cis.position","", Idea.guessType("Property",null,1.0,0.5));
-                position.add(Idea.createIdea("cis.position.x",0D,Idea.guessType("QualityDimension",null,1.0,0.5)));
-                position.add(Idea.createIdea("cis.position.y",0D,Idea.guessType("QualityDimension",null,1.0,0.5)));
+                Idea cis = Idea.createIdea("cis" + name,"", Idea.guessType("AbstractObject",null,1.0,0.5));
+                cis.add(Idea.createIdea("cis"+ name +".pitch", 0D, Idea.guessType("Property", null,1.0,0.5)));
+                cis.add(Idea.createIdea("cis"+ name +".fuel", 0D, Idea.guessType("Property", null,1.0,0.5)));
+                Idea position = Idea.createIdea("cis"+ name +".position","", Idea.guessType("Property",null,1.0,0.5));
+                position.add(Idea.createIdea("cis"+ name +".position.x",0D,Idea.guessType("QualityDimension",null,1.0,0.5)));
+                position.add(Idea.createIdea("cis"+ name +".position.y",0D,Idea.guessType("QualityDimension",null,1.0,0.5)));
                 cis.add(position);
-                Idea fov = Idea.createIdea("cis.FOV","", Idea.guessType("Property", null,1.0,0.5));
-                Idea bounds = Idea.createIdea("cis.FOV.bounds","", Idea.guessType("Property", null,1.0,0.5));
-                bounds.add(Idea.createIdea("cis.FOV.bounds.x",null, Idea.guessType("Property", null,1.0,0.5)));
-                bounds.add(Idea.createIdea("cis.FOV.bounds.y",null, Idea.guessType("Property", null,1.0,0.5)));
-                bounds.add(Idea.createIdea("cis.FOV.bounds.height",null, Idea.guessType("Property", null,1.0,0.5)));
-                bounds.add(Idea.createIdea("cis.FOV.bounds.width",null, Idea.guessType("Property", null,1.0,0.5)));
+                Idea fov = Idea.createIdea("cis"+ name +".FOV","", Idea.guessType("Property", null,1.0,0.5));
+                Idea bounds = Idea.createIdea("cis"+ name +".FOV.bounds","", Idea.guessType("Property", null,1.0,0.5));
+                bounds.add(Idea.createIdea("cis"+ name +".FOV.bounds.x",null, Idea.guessType("Property", null,1.0,0.5)));
+                bounds.add(Idea.createIdea("cis"+ name +".FOV.bounds.y",null, Idea.guessType("Property", null,1.0,0.5)));
+                bounds.add(Idea.createIdea("cis"+ name +".FOV.bounds.height",null, Idea.guessType("Property", null,1.0,0.5)));
+                bounds.add(Idea.createIdea("cis"+ name +".FOV.bounds.width",null, Idea.guessType("Property", null,1.0,0.5)));
                 fov.add(bounds);
-                fov.add(Idea.createIdea("cis.FOV.npoints",0, Idea.guessType("Property", null,1.0,0.5)));
-                fov.add(Idea.createIdea("cis.FOV.points","", Idea.guessType("Property", null,1.0,0.5)));
+                fov.add(Idea.createIdea("cis"+ name +".FOV.npoints",0, Idea.guessType("Property", null,1.0,0.5)));
+                fov.add(Idea.createIdea("cis"+ name +".FOV.points","", Idea.guessType("Property", null,1.0,0.5)));
                 cis.add(fov);
                 innerSenseMO=createMemoryObject("INNER", cis);
                 registerMemory(innerSenseMO,"Sensory");
@@ -101,23 +103,23 @@ public class AgentMind extends Mind {
                 registerMemory(knownApplesMO,"Working");
                 
  		// Create Sensor Codelets	
-		Codelet vision=new Vision(env.c);
+		Codelet vision=new Vision(creature);
 		vision.addOutput(visionMO);
                 insertCodelet(vision); //Creates a vision sensor
                 registerCodelet(vision,"Sensory");
 		
-		Codelet innerSense=new InnerSense(env.c);
+		Codelet innerSense=new InnerSense(creature);
 		innerSense.addOutput(innerSenseMO);
                 insertCodelet(innerSense); //A sensor for the inner state of the creature
                 registerCodelet(innerSense,"Sensory");
 		
 		// Create Actuator Codelets
-		Codelet legs=new LegsActionCodelet(env.c);
+		Codelet legs=new LegsActionCodelet(creature);
 		legs.addInput(legsMO);
                 insertCodelet(legs);
                 registerCodelet(legs,"Motor");
 
-		Codelet hands=new HandsActionCodelet(env.c);
+		Codelet hands=new HandsActionCodelet(creature);
 		hands.addInput(handsMO);
                 insertCodelet(hands);
                 registerCodelet(hands,"Motor");

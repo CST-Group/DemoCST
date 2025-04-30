@@ -23,6 +23,7 @@ import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.Memory;
 import br.unicamp.cst.core.entities.MemoryObject;
 import java.util.List;
+import static support.Constants.VISION_MO;
 import ws3dproxy.model.Creature;
 import ws3dproxy.model.Thing;
 
@@ -47,20 +48,17 @@ public class Vision extends Codelet{
 
 	@Override
 	public void accessMemoryObjects() {
-		visionMO=(MemoryObject)this.getOutput("VISION");
+		visionMO=(MemoryObject)this.getOutput(VISION_MO);
 	}
 
 	@Override
 	public void proc() {
-             c.updateState();
-             
-             synchronized (visionMO) {
+            c.updateState();
+            synchronized (visionMO) {
                 List<Thing> lt = c.getThingsInVision();
-                //System.out.println("Vision:" + lt.toString());
                 visionMO.setI(lt);
-                //Class cl = List.class;
-                //visionMO.setT(cl);
-             }
+            }
+             
 	}//end proc()
 
 	@Override
