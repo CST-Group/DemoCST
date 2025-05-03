@@ -2,6 +2,7 @@
 /out/
 /nbproject/private/
 .nb-gradle/
+inputlink.txt
 
 # Compiled class file
 *.class

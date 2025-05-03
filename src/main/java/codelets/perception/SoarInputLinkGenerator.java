@@ -100,7 +100,6 @@ public class SoarInputLinkGenerator extends Codelet {
                 Idea timestampIdea = new Idea("TIMESTAMP", lCDateTime.getTimeInMillis());
                 parametersIdea.add(timestampIdea);
                 creatureIdea.add(parametersIdea);
-                creatureIdea.add(new Idea("MEMORY"));
                 inputLinkIdea.add(creatureIdea);
             }
             

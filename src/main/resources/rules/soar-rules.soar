@@ -246,14 +246,14 @@ sp {apply*avoidBrick
 #JEWEL
 
 # Move Jewel or Move Food vs Get Jewel - getJewel wins
-sp {pref*moveJewel*getJewel
-(state <s> ^operator <o> + 
-                     <o2> +)
-(<o> ^name getJewel)
-(<o2> ^name << moveJewel moveFood >>)
--->
-(<s> ^operator <o> > <o2>)
-(write |moveJewel/moveFood vs getJewel - getJewel wins| (crlf) )} 
+#sp {pref*moveJewel*getJewel
+#(state <s> ^operator <o> +
+#                     <o2> +)
+#(<o> ^name getJewel)
+#(<o2> ^name << moveJewel moveFood >>)
+#-->
+#(<s> ^operator <o> > <o2>)
+#(write |moveJewel/moveFood vs getJewel - getJewel wins| (crlf) )}
 
 # Get Jewel vs Avoid Brick - getJewel wins
 sp {pref*getJewel*avoidBrick
