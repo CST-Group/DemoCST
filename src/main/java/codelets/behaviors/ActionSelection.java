@@ -91,8 +91,8 @@ public class ActionSelection extends Codelet {
                             message.put("Y", pos[1]);
                             message.put("SPEED", 1);
                         } else {
-                            double posX = (double) ((Idea) nextAction.get("X").getValue()).getValue();
-                            double posY = (double) ((Idea) nextAction.get("Y").getValue()).getValue();
+                            double posX = (double) nextAction.get("X").getValue();
+                            double posY = (double) nextAction.get("Y").getValue();
                             message.put("ACTION", "GOTO");
                             message.put("X", posX);
                             message.put("Y", posY);
@@ -101,11 +101,11 @@ public class ActionSelection extends Codelet {
                         legsMO.setI(message.toString(), 1.0, name);
                     } else {
                         if("GET".equals(nextAction.getName())) {
-                            String objectName = (String) ((Idea) nextAction.get("Name").getValue()).getValue();
+                            String objectName = (String) nextAction.get("Name").getValue();
                             message.put("ACTION", "PICKUP");
                             message.put("OBJECT", objectName);
                         } else if("EAT".equals(nextAction.getName())) {
-                            String objectName = (String) ((Idea) nextAction.get("Name").getValue()).getValue();
+                            String objectName = (String) nextAction.get("Name").getValue();
                             message.put("ACTION", "EATIT");
                             message.put("OBJECT", objectName);
                         }

@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.CST-Group:cst-desktop:3c45ae0'
+    implementation 'com.github.CST-Group:cst-desktop:1e4f318'
     implementation 'com.github.CST-Group:WS3DProxy:0.0.3'
     implementation 'org.json:json:20180813'
     testImplementation group: 'junit', name: 'junit', version: '4.10'
