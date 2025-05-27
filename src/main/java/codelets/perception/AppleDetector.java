@@ -25,6 +25,8 @@ import br.unicamp.cst.core.entities.MemoryObject;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import static support.Constants.KNOWN_APPLES;
+import static support.Constants.VISION_MO;
 import ws3dproxy.model.Thing;
 
 /**
@@ -47,9 +49,9 @@ public class AppleDetector extends Codelet {
 	@Override
 	public void accessMemoryObjects() {
                 synchronized(this) {
-		    this.visionMO=(MemoryObject)this.getInput("VISION");
+		    this.visionMO=(MemoryObject)this.getInput(VISION_MO);
                 }
-		this.knownApplesMO=(MemoryObject)this.getOutput("KNOWN_APPLES");
+		this.knownApplesMO=(MemoryObject)this.getOutput(KNOWN_APPLES);
 	}
 
 	@Override

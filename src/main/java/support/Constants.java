@@ -29,5 +29,7 @@ public class Constants {
     public static final String MOTOR_MEMORY_GROUP = "MOTOR_MEMORY_GROUP";
     public static final String SOAR_RULES_PATH = "soar-rules.soar";
     public static final String SOAR_FILE_RULES_PATH = "/rules/soar-rules.soar";
+    public static final String KNOWN_APPLES = "KNOWN_APPLES";
+    
     
 }

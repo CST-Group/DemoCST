@@ -246,14 +246,14 @@ sp {apply*avoidBrick
 #JEWEL
 
 # Move Jewel or Move Food vs Get Jewel - getJewel wins
-#sp {pref*moveJewel*getJewel
-#(state <s> ^operator <o> +
-#                     <o2> +)
-#(<o> ^name getJewel)
-#(<o2> ^name << moveJewel moveFood >>)
-#-->
-#(<s> ^operator <o> > <o2>)
-#(write |moveJewel/moveFood vs getJewel - getJewel wins| (crlf) )}
+sp {pref*moveJewel*getJewel
+(state <s> ^operator <o> + 
+                     <o2> +)
+(<o> ^name getJewel)
+(<o2> ^name << moveJewel moveFood >>)
+-->
+(<s> ^operator <o> > <o2>)
+(write |moveJewel/moveFood vs getJewel - getJewel wins| (crlf) )} 
 
 # Get Jewel vs Avoid Brick - getJewel wins
 sp {pref*getJewel*avoidBrick
@@ -412,7 +412,7 @@ sp {pref*moveFood*moveJewel*moveJewelWins
 (<fuel> ^VALUE <value> > <threshold>)        
 -->
 (<s> ^operator <o2> > <o>)
-(write |moveFood vs moveJewel | <value> | higher than | <threshold> (crlf) )}
+(write |moveFood vs moveJewel | <value> | higher than | <threshold> (crlf) )} 
 
 # Move Food vs Move Jewel Preferences - Move Jewel Wins
 sp {pref*moveFood*moveJewel*tie
@@ -472,42 +472,4 @@ sp {halt*condition
    -->
    (write |The command: | <attr> | was issued! |)
    (interrupt) 
-}
-
-####################### IMPASSE COPY IL TO OL #################################
-sp {elaborate*state*io
-    (state <s> ^superstate.io <io>)
-    -->
-    (<s> ^io <io>)
-} 
-
-sp {impasse*create-impasse-attribute
-   (state <s> ^impasse tie
-              ^item-count <item-count>
-              ^choices <choices>
-              ^superstate.io.output-link.IMPASSE_INFO <imp>)
-   -->
-   (<imp> ^choices <choices>
-          ^item-count <item-count>)
-}
-
-sp {impasse*copy-item
-   (state <s> ^impasse tie
-              ^item <item>
-              ^superstate.io.output-link.IMPASSE_INFO <imp>)
-   -->
-   (<imp> ^item (deep-copy <item>))
-}
-
-sp {impasse*il-to-ol-no-change-state
-   (state <s> ^impasse <impasse>
-              ^attribute <att>
-              ^superstate.io <io>)
-    (<io> ^output-link <ol>
-          ^input-link <il>)
-   -->
-   (<ol> ^INPUT_LINK (deep-copy <il>))
-   (<ol> ^IMPASSE_INFO <imp>)
-   (<imp> ^attribute <att>
-	  ^impasse <impasse>)
-}
+}     

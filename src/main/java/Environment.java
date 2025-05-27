@@ -47,15 +47,15 @@ public final class Environment {
              World.createFood(0, 350, 75);
              World.createFood(0, 100, 220);
              World.createFood(0, 250, 210);
-//             cDefault = proxy.createCreature(100,450,0,0);
-//             cDefault.start();
-//             
-//             cDefault2 = proxy.createCreature(450,100,0,0);
-//             cDefault2.start();
-//             
-//             cJSoar1 = proxy.createCreature(10,10,0,0);
-//             cJSoar1.start();
-//             
+             cDefault = proxy.createCreature(100,450,0,0);
+             cDefault.start();
+             
+             cDefault2 = proxy.createCreature(450,100,0,0);
+             cDefault2.start();
+             
+             cJSoar1 = proxy.createCreature(50,50,0,0);
+             cJSoar1.start();
+             
              cJSoar2 = proxy.createCreature(550,550,0,0);
              cJSoar2.start();
              
@@ -63,9 +63,9 @@ public final class Environment {
           } catch (CommandExecException e) {
               
           }
-//          System.out.println("Robot "+cDefault.getName()+" is ready to go.");
-//          System.out.println("Robot "+cDefault2.getName()+" is ready to go.");
-//          System.out.println("Robot "+cJSoar1.getName()+" is ready to go.");
+          System.out.println("Robot "+cDefault.getName()+" is ready to go.");
+          System.out.println("Robot "+cDefault2.getName()+" is ready to go.");
+          System.out.println("Robot "+cJSoar1.getName()+" is ready to go.");
           System.out.println("Robot "+cJSoar2.getName()+" is ready to go.");
 	}
     

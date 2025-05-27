@@ -33,6 +33,7 @@ import codelets.sensors.Vision;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import static support.Constants.VISION_MO;
 import ws3dproxy.model.Creature;
 import ws3dproxy.model.Thing;
 /**
@@ -73,7 +74,7 @@ public class AgentMindDefault extends Mind {
 		handsMO=createMemoryObject("HANDS", "");
                 registerMemory(handsMO,"Motor");
                 List<Thing> vision_list = Collections.synchronizedList(new ArrayList<Thing>());
-		visionMO=createMemoryObject("VISION_MO",vision_list);
+		visionMO=createMemoryObject(VISION_MO,vision_list);
                 registerMemory(visionMO,"Sensory");
                 //CreatureInnerSense cis = new CreatureInnerSense();
                 Idea cis = Idea.createIdea("cis" + name,"", Idea.guessType("AbstractObject",null,1.0,0.5));

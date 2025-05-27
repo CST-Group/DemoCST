@@ -70,7 +70,6 @@ public class ActionSelection extends Codelet {
             
             List<Idea> nextActions = getNextActions(outputLinkIdea);
             if(nextActions == null || nextActions.isEmpty()) return;
-                System.out.println("Tamanho: " + nextActions.size() + " content: " + nextActions);
                 for(Idea nextAction : nextActions) {
                      JSONObject message = new JSONObject();
                     if("IMPASSE_INFO".equals(nextAction.getName())){
