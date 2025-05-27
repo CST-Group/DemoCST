@@ -33,7 +33,7 @@ import codelets.sensors.Vision;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import static support.Constants.VISION_MO;
+import static support.Constants.*;
 import ws3dproxy.model.Creature;
 import ws3dproxy.model.Thing;
 /**
@@ -52,13 +52,13 @@ public class AgentMindDefault extends Mind {
                 this.name = name;
                 
                 // Create CodeletGroups and MemoryGroups for organizing Codelets and Memories
-                createCodeletGroup("Sensory");
-                createCodeletGroup("Motor");
-                createCodeletGroup("Perception");
-                createCodeletGroup("Behavioral");
-                createMemoryGroup("Sensory");
-                createMemoryGroup("Motor");
-                createMemoryGroup("Working");
+                createCodeletGroup(SENSORY);
+                createCodeletGroup(MOTOR);
+                createCodeletGroup(PERCEPTION);
+                createCodeletGroup(BEHAVIORAL);
+                createMemoryGroup(SENSORY);
+                createMemoryGroup(MOTOR);
+                createMemoryGroup(WORKING);
                 
                 // Declare Memory Objects
 	        Memory legsMO;  // This Memory is going to be a MemoryContainer
@@ -69,13 +69,13 @@ public class AgentMindDefault extends Mind {
                 Memory knownApplesMO;
                 
                 //Initialize Memory Objects
-                legsMO=createMemoryContainer("LEGS");
-                registerMemory(legsMO,"Motor");
-		handsMO=createMemoryObject("HANDS", "");
-                registerMemory(handsMO,"Motor");
+                legsMO=createMemoryContainer(LEGS);
+                registerMemory(legsMO,MOTOR);
+		handsMO=createMemoryObject(HANDS, "");
+                registerMemory(handsMO,MOTOR);
                 List<Thing> vision_list = Collections.synchronizedList(new ArrayList<Thing>());
 		visionMO=createMemoryObject(VISION_MO,vision_list);
-                registerMemory(visionMO,"Sensory");
+                registerMemory(visionMO,SENSORY);
                 //CreatureInnerSense cis = new CreatureInnerSense();
                 Idea cis = Idea.createIdea("cis" + name,"", Idea.guessType("AbstractObject",null,1.0,0.5));
                 cis.add(Idea.createIdea("cis"+ name +".pitch", 0D, Idea.guessType("Property", null,1.0,0.5)));
@@ -94,50 +94,50 @@ public class AgentMindDefault extends Mind {
                 fov.add(Idea.createIdea("cis"+ name +".FOV.npoints",0, Idea.guessType("Property", null,1.0,0.5)));
                 fov.add(Idea.createIdea("cis"+ name +".FOV.points","", Idea.guessType("Property", null,1.0,0.5)));
                 cis.add(fov);
-                innerSenseMO=createMemoryObject("INNER", cis);
-                registerMemory(innerSenseMO,"Sensory");
+                innerSenseMO=createMemoryObject(INNER, cis);
+                registerMemory(innerSenseMO,SENSORY);
                 Thing closestApple = null;
-                closestAppleMO=createMemoryObject("CLOSEST_APPLE", closestApple);
-                registerMemory(closestAppleMO,"Working");
+                closestAppleMO=createMemoryObject(CLOSEST_APPLE, closestApple);
+                registerMemory(closestAppleMO, WORKING);
                 List<Thing> knownApples = Collections.synchronizedList(new ArrayList<Thing>());
-                knownApplesMO=createMemoryObject("KNOWN_APPLES", knownApples);
-                registerMemory(knownApplesMO,"Working");
+                knownApplesMO=createMemoryObject(KNOWN_APPLES, knownApples);
+                registerMemory(knownApplesMO,WORKING);
                 
  		// Create Sensor Codelets	
 		Codelet vision=new Vision(creature);
 		vision.addOutput(visionMO);
                 insertCodelet(vision); //Creates a vision sensor
-                registerCodelet(vision,"Sensory");
+                registerCodelet(vision, SENSORY);
 		
 		Codelet innerSense=new InnerSense(creature);
 		innerSense.addOutput(innerSenseMO);
                 insertCodelet(innerSense); //A sensor for the inner state of the creature
-                registerCodelet(innerSense,"Sensory");
+                registerCodelet(innerSense,SENSORY);
 		
 		// Create Actuator Codelets
 		Codelet legs=new LegsActionCodelet(creature);
 		legs.addInput(legsMO);
                 insertCodelet(legs);
-                registerCodelet(legs,"Motor");
+                registerCodelet(legs,MOTOR);
 
 		Codelet hands=new HandsActionCodelet(creature);
 		hands.addInput(handsMO);
                 insertCodelet(hands);
-                registerCodelet(hands,"Motor");
+                registerCodelet(hands,MOTOR);
 		
 		// Create Perception Codelets
                 Codelet ad = new AppleDetector();
                 ad.addInput(visionMO);
                 ad.addOutput(knownApplesMO);
                 insertCodelet(ad);
-                registerCodelet(ad,"Perception");
+                registerCodelet(ad,PERCEPTION);
                 
 		Codelet closestAppleDetector = new ClosestAppleDetector();
 		closestAppleDetector.addInput(knownApplesMO);
 		closestAppleDetector.addInput(innerSenseMO);
 		closestAppleDetector.addOutput(closestAppleMO);
                 insertCodelet(closestAppleDetector);
-                registerCodelet(closestAppleDetector,"Perception");
+                registerCodelet(closestAppleDetector,PERCEPTION);
 		
 		// Create Behavior Codelets
 		Codelet goToClosestApple = new GoToClosestApple(creatureBasicSpeed,reachDistance);
@@ -145,7 +145,7 @@ public class AgentMindDefault extends Mind {
 		goToClosestApple.addInput(innerSenseMO);
 		goToClosestApple.addOutput(legsMO);
                 insertCodelet(goToClosestApple);
-                registerCodelet(goToClosestApple,"Behavioral");
+                registerCodelet(goToClosestApple,BEHAVIORAL);
                 
                 behavioralCodelets.add(goToClosestApple);
 		
@@ -155,14 +155,14 @@ public class AgentMindDefault extends Mind {
 		eatApple.addOutput(handsMO);
                 eatApple.addOutput(knownApplesMO);
                 insertCodelet(eatApple);
-                registerCodelet(eatApple,"Behavioral");
+                registerCodelet(eatApple,BEHAVIORAL);
                 behavioralCodelets.add(eatApple);
                 
                 Codelet forage=new Forage();
 		forage.addInput(knownApplesMO);
                 forage.addOutput(legsMO);
                 insertCodelet(forage);
-                registerCodelet(forage,"Behavioral");
+                registerCodelet(forage,BEHAVIORAL);
                 behavioralCodelets.add(forage);
                 
                 // sets a time step for running the codelets to avoid heating too much your machine

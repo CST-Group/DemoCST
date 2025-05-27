@@ -28,6 +28,7 @@ import br.unicamp.cst.representation.idea.Idea;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import static support.Constants.*;
 import ws3dproxy.model.Thing;
 
 /**
@@ -49,9 +50,9 @@ public class ClosestAppleDetector extends Codelet {
 
 	@Override
 	public void accessMemoryObjects() {
-		this.knownMO=(MemoryObject)this.getInput("KNOWN_APPLES");
-		this.innerSenseMO=(MemoryObject)this.getInput("INNER");
-		this.closestAppleMO=(MemoryObject)this.getOutput("CLOSEST_APPLE");	
+		this.knownMO=(MemoryObject)this.getInput(KNOWN_APPLES);
+		this.innerSenseMO=(MemoryObject)this.getInput(INNER);
+		this.closestAppleMO=(MemoryObject)this.getOutput(CLOSEST_APPLE);	
 	}
 	@Override
 	public void proc() {

@@ -28,6 +28,7 @@ import br.unicamp.cst.core.entities.Memory;
 import br.unicamp.cst.core.entities.MemoryContainer;
 import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.representation.idea.Idea;
+import static support.Constants.*;
 import ws3dproxy.model.Thing;
 
 public class GoToClosestApple extends Codelet {
@@ -46,9 +47,9 @@ public class GoToClosestApple extends Codelet {
 
 	@Override
 	public void accessMemoryObjects() {
-		closestAppleMO=(MemoryObject)this.getInput("CLOSEST_APPLE");
-		selfInfoMO=(MemoryObject)this.getInput("INNER");
-		legsMO=(MemoryContainer)this.getOutput("LEGS");
+		closestAppleMO=(MemoryObject)this.getInput(CLOSEST_APPLE);
+		selfInfoMO=(MemoryObject)this.getInput(INNER);
+		legsMO=(MemoryContainer)this.getOutput(LEGS);
 	}
 
 	@Override

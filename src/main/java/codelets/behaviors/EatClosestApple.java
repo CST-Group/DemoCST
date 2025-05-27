@@ -31,6 +31,7 @@ import br.unicamp.cst.core.entities.MemoryObject;
 import br.unicamp.cst.representation.idea.Idea;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import static support.Constants.*;
 import ws3dproxy.model.Thing;
 
 public class EatClosestApple extends Codelet {
@@ -52,10 +53,10 @@ public class EatClosestApple extends Codelet {
 
 	@Override
 	public void accessMemoryObjects() {
-		closestAppleMO=(MemoryObject)this.getInput("CLOSEST_APPLE");
-		innerSenseMO=(MemoryObject)this.getInput("INNER");
-		handsMO=(MemoryObject)this.getOutput("HANDS");
-                knownMO = (MemoryObject)this.getOutput("KNOWN_APPLES");
+		closestAppleMO=(MemoryObject)this.getInput(CLOSEST_APPLE);
+		innerSenseMO=(MemoryObject)this.getInput(INNER);
+		handsMO=(MemoryObject)this.getOutput(HANDS);
+                knownMO = (MemoryObject)this.getOutput(KNOWN_APPLES);
 	}
 
 	@Override
