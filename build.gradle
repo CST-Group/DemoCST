@@ -15,9 +15,12 @@ repositories {
         url "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
     }
     maven {
-        url "https://artifacts.camunda.com/artifactory/public/"
+        url "https://artifacts.camunda.com/ui/native/public/"
     }
     maven { url 'https://jitpack.io' }
+    maven {
+            url 'https://cst-group.github.io/cst-dependencies/maven-repo/'
+        }
 }
 
 dependencies {
