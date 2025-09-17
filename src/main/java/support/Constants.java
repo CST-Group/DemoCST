@@ -14,6 +14,8 @@ public class Constants {
     public static final String PLANNING = "Planning";
     public static final String MOTOR = "Motor";
     public static final String BEHAVIORAL = "Behavioral";
+    public static final String COMPETENCE = "Competence";
+    public static final String WORKING = "Working";
     public static final String HANDS = "HANDS";
     public static final String LEGS = "LEGS";
     public static final String INNER = "INNER";
@@ -31,7 +33,6 @@ public class Constants {
     public static final String SOAR_RULES_PATH = "soar-rules.soar";
     public static final String SOAR_FILE_RULES_PATH = "/rules/soar-rules.soar";
     public static final String KNOWN_APPLES = "KNOWN_APPLES";
-    public static final String CLOSEST_APPLE = "CLOSEST_APPLE";    
-    public static final String WORKING = "Working";    
+    public static final String CLOSEST_APPLE = "CLOSEST_APPLE";   
     
 }

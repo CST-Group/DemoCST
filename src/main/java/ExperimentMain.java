@@ -36,9 +36,14 @@ public class ExperimentMain {
         String creatureName = env.c.getName();
         switch (agentType) {
             case "soar":
-                AgentMindJSoar aJsoar1 = new AgentMindJSoar(env.c, env.c.getName()); 
+                AgentMindJSoar aJsoar1 = new AgentMindJSoar(env.c, creatureName); 
                 MindViewer mvAJsoar1 = new MindViewer(aJsoar1,"MindViewer - Agent Soar " + creatureName, null);
                 mvAJsoar1.setVisible(true);
+                break;
+            case "bn":
+                AgentMindBN aBN1 = new AgentMindBN(env,creatureName); 
+                MindViewer mvABN1 = new MindViewer(aBN1,"MindViewer - Agent BN " + creatureName, null);
+                mvABN1.setVisible(true);
                 break;
             case "default":
                 AgentMindDefault a1 = new AgentMindDefault(env.c, "AgentDefault " +  creatureName);
