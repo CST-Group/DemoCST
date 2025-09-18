@@ -169,11 +169,11 @@ public class BehaviorToActionCodelet extends Codelet {
             int maxY = 600;
             positionX = (double) random.nextInt(maxX + 1);
             positionY = (double) random.nextInt(maxY + 1);
-            Idea message = Idea.createIdea("message","", Idea.guessType("Property",1));
-            message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",1)));
-            message.add(Idea.createIdea("X",(int)positionX, Idea.guessType("Property",1)));
-            message.add(Idea.createIdea("Y",(int)positionY, Idea.guessType("Property",1)));
-            message.add(Idea.createIdea("SPEED",creatureBasicSpeed, Idea.guessType("Property",1)));
+            Idea message = Idea.createIdea("message","",  Idea.guessType("Property",null,1.0,0.5));
+            message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",null,1.0,0.5)));
+            message.add(Idea.createIdea("X",(int)positionX, Idea.guessType("Property",null,1.0,0.5)));
+            message.add(Idea.createIdea("Y",(int)positionY, Idea.guessType("Property",null,1.0,0.5)));
+            message.add(Idea.createIdea("SPEED",creatureBasicSpeed, Idea.guessType("Property",null,1.0,0.5)));
             activation=1.0;
             legsMO.setI(toJson(message),activation,name);
         }
@@ -223,20 +223,20 @@ public class BehaviorToActionCodelet extends Codelet {
 
                 double distance = pSelf.distance(pApple);
                 //JSONObject message=new JSONObject();
-                Idea message = Idea.createIdea("message","", Idea.guessType("Property",1));
+                Idea message = Idea.createIdea("message","", Idea.guessType("Property",null,1.0,0.5));
                 try {
                         if(distance>reachDistance){ //Go to it
-                                message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",1)));
-                                message.add(Idea.createIdea("X",(int)appleX, Idea.guessType("Property",1)));
-                                message.add(Idea.createIdea("Y",(int)appleY, Idea.guessType("Property",1)));
-                                message.add(Idea.createIdea("SPEED",creatureBasicSpeed, Idea.guessType("Property",1)));
+                                message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",null,1.0,0.5)));
+                                message.add(Idea.createIdea("X",(int)appleX, Idea.guessType("Property",null,1.0,0.5)));
+                                message.add(Idea.createIdea("Y",(int)appleY, Idea.guessType("Property",null,1.0,0.5)));
+                                message.add(Idea.createIdea("SPEED",creatureBasicSpeed, Idea.guessType("Property",null,1.0,0.5)));
                                 activation=1.0;
 
                         }else{//Stop
-                                message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",1)));
-                                message.add(Idea.createIdea("X",(int)appleX, Idea.guessType("Property",1)));
-                                message.add(Idea.createIdea("Y",(int)appleY, Idea.guessType("Property",1)));
-                                message.add(Idea.createIdea("SPEED",0, Idea.guessType("Property",1)));
+                                message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",null,1.0,0.5)));
+                                message.add(Idea.createIdea("X",(int)appleX, Idea.guessType("Property",null,1.0,0.5)));
+                                message.add(Idea.createIdea("Y",(int)appleY, Idea.guessType("Property",null,1.0,0.5)));
+                                message.add(Idea.createIdea("SPEED",0, Idea.guessType("Property",null,1.0,0.5)));
                                 activation=0.5;
                         }
                         legsMO.setI(toJson(message),activation,name);
