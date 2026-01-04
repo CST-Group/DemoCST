@@ -21,7 +21,9 @@ package support;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 import ws3dproxy.CommandExecException;
+import ws3dproxy.model.Creature;
 import ws3dproxy.model.Thing;
 import ws3dproxy.model.World;
 import ws3dproxy.model.WorldPoint;
@@ -34,22 +36,28 @@ import ws3dproxy.util.Logger;
  */
 public class ResourcesGenerator extends Thread {
 
+    // Variáveis de controle para a lógica solicitada
+    private static final int ITEMS_PER_BATCH = 1; // Adiciona 1 por vez
+    private static final int MAX_ITEMS_ALLOWED = 1; // Máximo de 3 no mundo
     private int timeInMinutes;
     private List<Thing> allThings = new ArrayList<Thing>();
     private double width;
     private double height;
     private WorldPoint dsLocation;
+    private Creature creature;
 
-    public ResourcesGenerator(int timeframe, double envWidth, double envHeight, double xDS, double yDS) {
+    public ResourcesGenerator(int timeframe, double envWidth, double envHeight, double xDS, double yDS, Creature c) {
         super("ResourcesGenerator");
         if (timeframe == 0) timeInMinutes = Constants.TIMEFRAME;
         else timeInMinutes = timeframe;
         width = envWidth;
         height = envHeight;
         dsLocation = new WorldPoint(xDS,yDS); //delivery spot
+        this.creature = c;
     }
 
     public void run() {
+        generateBrick();
         while (true) {
             try {
                 //System.out.println(".......ResourcesGenerator cycle running.........");
@@ -57,6 +65,8 @@ public class ResourcesGenerator extends Thread {
                 //generate food
                 //perishable
                 generateFood(0);
+                generateJewel(1);
+                generateJewel(3);
                 //non-perishable
                 //generateFood(1);
                 ///generate jewels
@@ -66,7 +76,7 @@ public class ResourcesGenerator extends Thread {
 
                 //System.out.println("..............ResourcesGenerator SLEEPING........");
                 //Thread.sleep(timeInMinutes * 60000);
-                Thread.sleep(timeInMinutes * 1000);
+                Thread.sleep(timeInMinutes * 6000);
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -112,22 +122,13 @@ public class ResourcesGenerator extends Thread {
     private void generateFood(int type) {
         try {
             allThings = World.getWorldEntities();
-            int number = 1;
+            removeExcessResources("Red", "Food", 21);
+            int number = ITEMS_PER_BATCH;
             Random rdX = new Random();
             Random rdY = new Random();
             double cX, cY;
             String pointListStr = "" ;
-
-            switch (type) {
-                //perishable
-                case 0:
-                    number = getPoissonRandomNumber(Constants.pFoodLAMBDA);
-                    break;
-                case 1:
-                    //non-perishable
-                    number = getPoissonRandomNumber(Constants.npFoodLAMBDA);
-                    break;
-            }
+            
             for (int i = 0; i < number; i++) {
                 do {
                     cX = rdX.nextDouble() * width;
@@ -147,32 +148,19 @@ public class ResourcesGenerator extends Thread {
     private void generateJewel(int type) {
         try {
             allThings = World.getWorldEntities();
-            int number = 1;
+            if(type == 1){
+                
+                removeExcessResources("Green", "Jewel", 3);
+            } else if(type == 3){
+                removeExcessResources("Yellow", "Jewel", 3);
+            }
+            
+            int number = ITEMS_PER_BATCH;
             Random rdX = new Random();
             Random rdY = new Random();
             double cX, cY;
             String pointListStr = "" ;
-
-            switch (type) {
-                case 0:
-                    number = getPoissonRandomNumber(Constants.redLAMBDA);
-                    break;
-                case 1:
-                    number = getPoissonRandomNumber(Constants.greenLAMBDA);
-                    break;
-                case 2:
-                    number = getPoissonRandomNumber(Constants.blueLAMBDA);
-                    break;
-                case 3:
-                    number = getPoissonRandomNumber(Constants.yellowLAMBDA);
-                    break;
-                case 4:
-                    number = getPoissonRandomNumber(Constants.magentaLAMBDA);
-                    break;
-                case 5:
-                    number = getPoissonRandomNumber(Constants.whiteLAMBDA);
-                    break;
-            }
+            
             for (int i = 0; i < number; i++) {
                 do {
                     cX = rdX.nextDouble() * width;
@@ -187,5 +175,62 @@ public class ResourcesGenerator extends Thread {
             Logger.logException(ResourcesGenerator.class.getName(), ex);
         }
 
+    }
+    
+    private void generateBrick() {
+        System.out.println("Creating bricks");
+        try {
+            World.createBrick(2, 0, 0, width, 0);
+            //World.createBrick(3, 100, 100, 30, 30);
+            World.createBrick(2, 0, 0, 0, height);
+            World.createBrick(2, 0, height, width, height);
+            World.createBrick(2, width, 0, width, height);
+//            World.createBrick(2, 0, 0, width, height);
+//            World.createBrick(2, 0, 0, width, height);
+        } catch (CommandExecException ex) {
+            Logger.logException(ResourcesGenerator.class.getName(), ex);
+        }
+
+    }
+    
+    // Método auxiliar para limpar os recursos antigos
+    private void removeExcessResources(String color, String name, int category) {
+        // Filtra a lista allThings para pegar apenas os itens do tipo atual
+        // category seria "Food" ou "Jewel" e o type o subtipo (cor ou perecível)
+        List<Thing> currentItems = new ArrayList<>();
+        try {
+            allThings = World.getWorldEntities();
+        } catch (CommandExecException ex) {
+            java.util.logging.Logger.getLogger(ResourcesGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (Thing t : allThings) {
+            if (t.getName().contains(name) && t.getAttributes().getCategory()== category) {
+                if(t.getAttributes().getCategory() == 3){
+                    if(t.getAttributes().getColor().equals(color)) {
+                        currentItems.add(t);
+                    }
+                } else {
+                    currentItems.add(t);
+                }
+            }
+        }
+        int currentCount = currentItems.size();
+        int futureTotal = currentCount + ITEMS_PER_BATCH;
+        int toRemove = futureTotal - MAX_ITEMS_ALLOWED;
+
+        if (toRemove > 0) {
+            System.out.println("Removendo " + toRemove + " itens antigos de tipo " + category);
+            // Remove os primeiros da lista (assumindo que allThings retorna na ordem de criação ou ID crescente)
+            for (int i = 0; i < toRemove; i++) {
+                try {
+                    String nameToRemove = currentItems.get(i).getName();
+                    // Chama o comando para deletar do mundo
+                    creature.putInSack(nameToRemove);
+                    
+                } catch (Exception ex) {
+                     Logger.logException(ResourcesGenerator.class.getName(), ex);
+                }
+            }
+        }
     }
 }

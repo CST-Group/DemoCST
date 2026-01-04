@@ -2,7 +2,7 @@ apply plugin: 'application'
 mainClassName = 'ExperimentMain'
 version = '0.0.4' 
 
-sourceCompatibility = '1.8'
+//sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 if (!hasProperty('mainClass')) {

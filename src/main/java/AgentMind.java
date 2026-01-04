@@ -21,13 +21,11 @@ import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.Memory;
 import br.unicamp.cst.core.entities.Mind;
 import br.unicamp.cst.representation.idea.Idea;
-import codelets.behaviors.EatClosestApple;
-import codelets.behaviors.Forage;
-import codelets.behaviors.GoToClosestApple;
-import codelets.motor.HandsActionCodelet;
+import codelets.behaviors.IntensityToVelocity;
+import codelets.behaviors.VelocityToNextPosition;
 import codelets.motor.LegsActionCodelet;
-import codelets.perception.AppleDetector;
-import codelets.perception.ClosestAppleDetector;
+import codelets.perception.FontsDetector;
+import codelets.perception.FontsIntensityCalculator;
 import codelets.sensors.InnerSense;
 import codelets.sensors.Vision;
 import java.awt.Polygon;
@@ -59,17 +57,16 @@ public class AgentMind extends Mind {
                 
                 // Declare Memory Objects
 	        Memory legsMO;  // This Memory is going to be a MemoryContainer
-	        Memory handsMO;
                 Memory visionMO;
                 Memory innerSenseMO;
-                Memory closestAppleMO;
-                Memory knownApplesMO;
+                Memory fontsIntensityMO;
+                Memory knownFontsMO;
+                Memory wheelsVelocityMO;
                 
                 //Initialize Memory Objects
-                legsMO=createMemoryContainer("LEGS");
+                legsMO=createMemoryObject("LEGS");
                 registerMemory(legsMO,"Motor");
-		handsMO=createMemoryObject("HANDS", "");
-                registerMemory(handsMO,"Motor");
+                
                 List<Thing> vision_list = Collections.synchronizedList(new ArrayList<Thing>());
 		visionMO=createMemoryObject("VISION",vision_list);
                 registerMemory(visionMO,"Sensory");
@@ -81,6 +78,66 @@ public class AgentMind extends Mind {
                 position.add(Idea.createIdea("cis.position.x",0D,Idea.guessType("QualityDimension",null,1.0,0.5)));
                 position.add(Idea.createIdea("cis.position.y",0D,Idea.guessType("QualityDimension",null,1.0,0.5)));
                 cis.add(position);
+                
+                Idea sensors = Idea.createIdea("cis.sensors","", Idea.guessType("Property", null,1.0,0.5));
+                
+                Idea brickSensor = Idea.createIdea("cis.sensors.brickSensor","", Idea.guessType("Property", null,1.0,0.5));
+                
+                Idea brickSensorRight = Idea.createIdea("cis.sensors.brickSensor.right","", Idea.guessType("Property", null,1.0,0.5));
+                brickSensorRight.add(Idea.createIdea("cis.sensors.brickSensor.right.x",0D, Idea.guessType("Property", null,1.0,0.5)));
+                brickSensorRight.add(Idea.createIdea("cis.sensors.brickSensor.right.y",0D, Idea.guessType("Property", null,1.0,0.5)));
+                brickSensor.add(brickSensorRight);
+                
+                Idea brickSensorLeft = Idea.createIdea("cis.sensors.brickSensor.left","", Idea.guessType("Property", null,1.0,0.5));
+                brickSensorLeft.add(Idea.createIdea("cis.sensors.brickSensor.left.x",0D, Idea.guessType("Property", null,1.0,0.5)));
+                brickSensorLeft.add(Idea.createIdea("cis.sensors.brickSensor.left.y",0D, Idea.guessType("Property", null,1.0,0.5)));
+                brickSensor.add(brickSensorLeft);
+                
+                sensors.add(brickSensor);
+                
+                Idea foodSensor = Idea.createIdea("cis.sensors.foodSensor","", Idea.guessType("Property", null,1.0,0.5));
+                
+                Idea foodSensorRight = Idea.createIdea("cis.sensors.foodSensor.right","", Idea.guessType("Property", null,1.0,0.5));
+                foodSensorRight.add(Idea.createIdea("cis.sensors.foodSensor.right.x",null, Idea.guessType("Property", null,1.0,0.5)));
+                foodSensorRight.add(Idea.createIdea("cis.sensors.foodSensor.right.y",null, Idea.guessType("Property", null,1.0,0.5)));
+                foodSensor.add(foodSensorRight);
+                
+                Idea foodSensorLeft = Idea.createIdea("cis.sensors.foodSensor.left","", Idea.guessType("Property", null,1.0,0.5));
+                foodSensorLeft.add(Idea.createIdea("cis.sensors.foodSensor.left.x",0D, Idea.guessType("Property", null,1.0,0.5)));
+                foodSensorLeft.add(Idea.createIdea("cis.sensors.foodSensor.left.y",0D, Idea.guessType("Property", null,1.0,0.5)));
+                foodSensor.add(foodSensorLeft);
+                
+                sensors.add(foodSensor);
+                
+                Idea greenJewelSensor = Idea.createIdea("cis.sensors.greenJewelSensor","", Idea.guessType("Property", null,1.0,0.5));
+                
+                Idea greenJewelSensorRight = Idea.createIdea("cis.sensors.greenJewelSensor.right","", Idea.guessType("Property", null,1.0,0.5));
+                greenJewelSensorRight.add(Idea.createIdea("cis.sensors.greenJewelSensor.right.x",0D, Idea.guessType("Property", null,1.0,0.5)));
+                greenJewelSensorRight.add(Idea.createIdea("cis.sensors.greenJewelSensor.right.y",0D, Idea.guessType("Property", null,1.0,0.5)));
+                greenJewelSensor.add(greenJewelSensorRight);
+                
+                Idea greenJewelSensorLeft = Idea.createIdea("cis.sensors.greenJewelSensor.left","", Idea.guessType("Property", null,1.0,0.5));
+                greenJewelSensorLeft.add(Idea.createIdea("cis.sensors.greenJewelSensor.left.x",0D, Idea.guessType("Property", null,1.0,0.5)));
+                greenJewelSensorLeft.add(Idea.createIdea("cis.sensors.greenJewelSensor.left.y",0D, Idea.guessType("Property", null,1.0,0.5)));
+                greenJewelSensor.add(greenJewelSensorLeft);
+                sensors.add(greenJewelSensor);
+                
+                Idea yellowJewelSensor = Idea.createIdea("cis.sensors.yellowJewelSensor","", Idea.guessType("Property", null,1.0,0.5));
+                
+                Idea yellowJewelSensorRight = Idea.createIdea("cis.sensors.yellowJewelSensor.right","", Idea.guessType("Property", null,1.0,0.5));
+                yellowJewelSensorRight.add(Idea.createIdea("cis.sensors.yellowJewelSensor.right.x",null, Idea.guessType("Property", null,1.0,0.5)));
+                yellowJewelSensorRight.add(Idea.createIdea("cis.sensors.yellowJewelSensor.right.y",null, Idea.guessType("Property", null,1.0,0.5)));
+                yellowJewelSensor.add(yellowJewelSensorRight);
+                
+                Idea yellowJewelSensorLeft = Idea.createIdea("cis.sensors.yellowJewelSensor.left","", Idea.guessType("Property", null,1.0,0.5));
+                yellowJewelSensorLeft.add(Idea.createIdea("cis.sensors.yellowJewelSensor.left.x",null, Idea.guessType("Property", null,1.0,0.5)));
+                yellowJewelSensorLeft.add(Idea.createIdea("cis.sensors.yellowJewelSensor.left.y",null, Idea.guessType("Property", null,1.0,0.5)));
+                yellowJewelSensor.add(yellowJewelSensorLeft);
+                
+                sensors.add(yellowJewelSensor);
+                
+                cis.add(sensors);
+                
                 Idea fov = Idea.createIdea("cis.FOV","", Idea.guessType("Property", null,1.0,0.5));
                 Idea bounds = Idea.createIdea("cis.FOV.bounds","", Idea.guessType("Property", null,1.0,0.5));
                 bounds.add(Idea.createIdea("cis.FOV.bounds.x",null, Idea.guessType("Property", null,1.0,0.5)));
@@ -93,12 +150,21 @@ public class AgentMind extends Mind {
                 cis.add(fov);
                 innerSenseMO=createMemoryObject("INNER", cis);
                 registerMemory(innerSenseMO,"Sensory");
-                Thing closestApple = null;
-                closestAppleMO=createMemoryObject("CLOSEST_APPLE", closestApple);
-                registerMemory(closestAppleMO,"Working");
-                List<Thing> knownApples = Collections.synchronizedList(new ArrayList<Thing>());
-                knownApplesMO=createMemoryObject("KNOWN_APPLES", knownApples);
-                registerMemory(knownApplesMO,"Working");
+                Idea fontsIntensityIdea = Idea.createIdea("fontsIntensity","", Idea.guessType("Property", null,1.0,0.5));
+                fontsIntensityMO=createMemoryObject("FONTS_INTENSITY", fontsIntensityIdea);
+                registerMemory(fontsIntensityMO,"Working");
+                List<Thing> knownFonts = Collections.synchronizedList(new ArrayList<Thing>());
+                knownFontsMO=createMemoryObject("KNOWN_FONTS", knownFonts);
+                registerMemory(knownFontsMO,"Working");
+                
+                
+                Idea wheelsVelocityIdea = new Idea("wheelsVelocityIdea","", Idea.guessType("Property", null,1.0,0.5));
+                Idea rightVelocityIdea = new Idea("VRight",0D, Idea.guessType("Property", null,1.0,0.5));
+                wheelsVelocityIdea.add(rightVelocityIdea);
+                Idea leftVelocityIdea = new Idea("VLeft",0D, Idea.guessType("Property", null,1.0,0.5));
+                wheelsVelocityIdea.add(leftVelocityIdea);
+                wheelsVelocityMO=createMemoryObject("WHEELS_VELOCITY", wheelsVelocityIdea);
+                registerMemory(wheelsVelocityMO,"Sensory");
                 
  		// Create Sensor Codelets	
 		Codelet vision=new Vision(env.c);
@@ -116,51 +182,38 @@ public class AgentMind extends Mind {
 		legs.addInput(legsMO);
                 insertCodelet(legs);
                 registerCodelet(legs,"Motor");
-
-		Codelet hands=new HandsActionCodelet(env.c);
-		hands.addInput(handsMO);
-                insertCodelet(hands);
-                registerCodelet(hands,"Motor");
 		
 		// Create Perception Codelets
-                Codelet ad = new AppleDetector();
-                ad.addInput(visionMO);
-                ad.addOutput(knownApplesMO);
-                insertCodelet(ad);
-                registerCodelet(ad,"Perception");
+                Codelet fontsDetector = new FontsDetector();
+                fontsDetector.addInput(visionMO);
+                fontsDetector.addOutput(knownFontsMO);
+                insertCodelet(fontsDetector);
+                registerCodelet(fontsDetector,"Perception");
                 
-		Codelet closestAppleDetector = new ClosestAppleDetector();
-		closestAppleDetector.addInput(knownApplesMO);
-		closestAppleDetector.addInput(innerSenseMO);
-		closestAppleDetector.addOutput(closestAppleMO);
-                insertCodelet(closestAppleDetector);
-                registerCodelet(closestAppleDetector,"Perception");
+		Codelet fontsIntensityCalculator = new FontsIntensityCalculator();
+		fontsIntensityCalculator.addInput(knownFontsMO);
+		fontsIntensityCalculator.addInput(innerSenseMO);
+		fontsIntensityCalculator.addOutput(fontsIntensityMO);
+                insertCodelet(fontsIntensityCalculator);
+                registerCodelet(fontsIntensityCalculator,"Perception");
 		
 		// Create Behavior Codelets
-		Codelet goToClosestApple = new GoToClosestApple(creatureBasicSpeed,reachDistance);
-		goToClosestApple.addInput(closestAppleMO);
-		goToClosestApple.addInput(innerSenseMO);
-		goToClosestApple.addOutput(legsMO);
-                insertCodelet(goToClosestApple);
-                registerCodelet(goToClosestApple,"Behavioral");
-                
-                behavioralCodelets.add(goToClosestApple);
 		
-		Codelet eatApple=new EatClosestApple(reachDistance);
-		eatApple.addInput(closestAppleMO);
-		eatApple.addInput(innerSenseMO);
-		eatApple.addOutput(handsMO);
-                eatApple.addOutput(knownApplesMO);
-                insertCodelet(eatApple);
-                registerCodelet(eatApple,"Behavioral");
-                behavioralCodelets.add(eatApple);
+		Codelet intensityToVelocity=new IntensityToVelocity();
+		intensityToVelocity.addInput(fontsIntensityMO);
+		intensityToVelocity.addInput(innerSenseMO);
+		intensityToVelocity.addOutput(wheelsVelocityMO);
+                insertCodelet(intensityToVelocity);
+                registerCodelet(intensityToVelocity,"Behavioral");
+                behavioralCodelets.add(intensityToVelocity);
                 
-                Codelet forage=new Forage();
-		forage.addInput(knownApplesMO);
-                forage.addOutput(legsMO);
-                insertCodelet(forage);
-                registerCodelet(forage,"Behavioral");
-                behavioralCodelets.add(forage);
+                Codelet velocityToNextPosition=new VelocityToNextPosition();
+		velocityToNextPosition.addInput(wheelsVelocityMO);
+		velocityToNextPosition.addInput(innerSenseMO);
+		velocityToNextPosition.addOutput(legsMO);
+                insertCodelet(velocityToNextPosition);
+                registerCodelet(velocityToNextPosition,"Behavioral");
+                behavioralCodelets.add(velocityToNextPosition);
                 
                 // sets a time step for running the codelets to avoid heating too much your machine
                 for (Codelet c : this.getCodeRack().getAllCodelets())

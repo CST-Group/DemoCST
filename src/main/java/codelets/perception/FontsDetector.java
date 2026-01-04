@@ -22,6 +22,7 @@ package codelets.perception;
 import br.unicamp.cst.core.entities.Codelet;
 import br.unicamp.cst.core.entities.Memory;
 import br.unicamp.cst.core.entities.MemoryObject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -35,13 +36,13 @@ import ws3dproxy.model.Thing;
  * @author klaus
  *
  */
-public class AppleDetector extends Codelet {
+public class FontsDetector extends Codelet {
 
         private Memory visionMO;
-        private Memory knownApplesMO;
+        private Memory knownFontsMO;
 
-	public AppleDetector(){
-            this.name = "AppleDetector";
+	public FontsDetector(){
+            this.name = "FontsDetector";
 	}
 
 	@Override
@@ -49,33 +50,29 @@ public class AppleDetector extends Codelet {
                 synchronized(this) {
 		    this.visionMO=(MemoryObject)this.getInput("VISION");
                 }
-		this.knownApplesMO=(MemoryObject)this.getOutput("KNOWN_APPLES");
+		this.knownFontsMO=(MemoryObject)this.getOutput("KNOWN_FONTS");
 	}
 
 	@Override
 	public void proc() {
             CopyOnWriteArrayList<Thing> vision;
-            List<Thing> known;
+            List<Thing> known = new ArrayList<Thing>();
             synchronized (visionMO) {
-               //vision = Collections.synchronizedList((List<Thing>) visionMO.getI());
                vision = new CopyOnWriteArrayList((List<Thing>) visionMO.getI());    
-               known = Collections.synchronizedList((List<Thing>) knownApplesMO.getI());
-               //known = new CopyOnWriteArrayList((List<Thing>) knownApplesMO.getI());    
                synchronized(vision) {
                  for (Thing t : vision) {
-                    boolean found = false;
-                    synchronized(known) {
-                       CopyOnWriteArrayList<Thing> myknown = new CopyOnWriteArrayList<>(known);
-                       for (Thing e : myknown)
-                          if (t.getName().equals(e.getName())) {
-                            found = true;
-                            break;
-                          }
-                       if (found == false && t.getName().contains("PFood") && !t.getName().contains("NPFood")) known.add(t);
+                    if (t.getName().contains("PFood") && !t.getName().contains("NPFood")) {
+                        known.add(t);
+                    } else if(t.getName().contains("Jewel")) {
+                        String jewelColor = t.getAttributes().getColor();
+                        if(jewelColor.equals("Yellow") || jewelColor.equals("Green"))
+                            known.add(t);
+                    } else if(t.getName().contains("Brick")){
+                        known.add(t);
                     }
-               
                  }
                }
+               knownFontsMO.setI(known);
             }
 	}// end proc
         
@@ -83,8 +80,6 @@ public class AppleDetector extends Codelet {
         public void calculateActivation() {
         
         }
-
-
 }//end class
 
 

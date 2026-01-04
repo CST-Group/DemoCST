@@ -56,6 +56,29 @@ public class InnerSense extends Codelet {
              cis.get("position.y").setValue(c.getPosition().getY());
              cis.get("pitch").setValue(c.getPitch());
              cis.get("fuel").setValue(c.getFuel());
+             Idea sensors = cis.get( "sensors");
+             ArrayList<Double> sensorPosition = getSensorPosition();
+             
+             sensors.get("foodSensor.right.x").setValue(sensorPosition.get(0));
+             sensors.get("foodSensor.right.y").setValue(sensorPosition.get(1));
+             sensors.get("foodSensor.left.x").setValue(sensorPosition.get(2));
+             sensors.get("foodSensor.left.y").setValue(sensorPosition.get(3));
+             
+             sensors.get("greenJewelSensor.right.x").setValue(sensorPosition.get(0));
+             sensors.get("greenJewelSensor.right.y").setValue(sensorPosition.get(1));
+             sensors.get("greenJewelSensor.left.x").setValue(sensorPosition.get(2));
+             sensors.get("greenJewelSensor.left.y").setValue(sensorPosition.get(3));
+             
+             sensors.get("brickSensor.right.x").setValue(sensorPosition.get(0));
+             sensors.get("brickSensor.right.y").setValue(sensorPosition.get(1));
+             sensors.get("brickSensor.left.x").setValue(sensorPosition.get(2));
+             sensors.get("brickSensor.left.y").setValue(sensorPosition.get(3));
+             
+             sensors.get("yellowJewelSensor.right.x").setValue(sensorPosition.get(0));
+             sensors.get("yellowJewelSensor.right.y").setValue(sensorPosition.get(1));
+             sensors.get("yellowJewelSensor.left.x").setValue(sensorPosition.get(2));
+             sensors.get("yellowJewelSensor.left.y").setValue(sensorPosition.get(3));
+             
              Polygon pol = c.getFOV();
              Idea poli = cis.get("FOV");
              poli.get("bounds.x").setValue(pol.getBounds().getX());
@@ -70,12 +93,38 @@ public class InnerSense extends Codelet {
                  p.add(Idea.createIdea("points.["+i+"].y",pol.ypoints[i], Idea.guessType("Property", null,1.0,0.5)));
                  if (points.get("["+i+"]") == null) points.add(p);
              }
+             
              innerSenseMO.setI(cis);
 	}
         
         @Override
         public void calculateActivation() {
         
+        }
+        
+        private ArrayList<Double> getSensorPosition(){
+            ArrayList<Double> pos = new ArrayList<Double>();
+            double offset = 0.1; 
+        
+            double currentX = c.getPosition().getX();
+            double currentY = c.getPosition().getY();
+            double currentPitch = c.getPitch();
+
+            // Ângulo para a Esquerda (+90 graus ou PI/2 radianos)
+            double angleLeft = currentPitch + (Math.PI / 2.0);
+            double leftX = currentX + offset * Math.cos(angleLeft);
+            double leftY = currentY + offset * Math.sin(angleLeft);
+
+            // Ângulo para a Direita (-90 graus ou PI/2 radianos)
+            double angleRight = currentPitch - (Math.PI / 2.0);
+            double rightX = currentX + offset * Math.cos(angleRight);
+            double rightY = currentY + offset * Math.sin(angleRight);
+
+            pos.add(rightX);
+            pos.add(rightY);
+            pos.add(leftX);
+            pos.add(leftY);
+            return pos;
         }
 
 

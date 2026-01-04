@@ -41,10 +41,10 @@ public final class Environment {
           try {   
              World w = World.getInstance();
              w.reset();
-             World.createFood(0, 350, 75);
-             World.createFood(0, 100, 220);
-             World.createFood(0, 250, 210);
-             c = proxy.createCreature(100,450,0,0);
+//             World.createFood(0, 350, 75);
+//             World.createFood(0, 100, 220);
+//             World.createFood(0, 250, 210);
+             c = proxy.createCreature(400,300,1,0);
              c.start();
              grow(w,7);
           } catch (CommandExecException e) {
@@ -59,7 +59,7 @@ public final class Environment {
                 time = Constants.TIMEFRAME;
             }
             w.getDimensionAndDeliverySpot();
-            ResourcesGenerator rg = new ResourcesGenerator(time, w.getEnvironmentWidth(), w.getEnvironmentHeight(), w.getDeliverySpot().getX(), w.getDeliverySpot().getY());
+            ResourcesGenerator rg = new ResourcesGenerator(time, w.getEnvironmentWidth(), w.getEnvironmentHeight(), w.getDeliverySpot().getX(), w.getDeliverySpot().getY(), c);
             rg.start();
         } catch (CommandExecException ex) {
             Logger.logException(World.class.getName(), ex);
