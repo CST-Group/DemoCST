@@ -31,7 +31,7 @@ public class ExperimentMain {
     public ExperimentMain(String growOption) {
         Logger.getLogger("codelets").setLevel(Level.SEVERE);
         // Create Environment
-        Environment env=new Environment(growOption); //Creates only a creature and some apples
+        Environment env=new Environment(); //Creates only a creature and some apples
         String creatureName = env.c.getName();
         AgentMind a1 = new AgentMind(env.c, "AgentCSTCore " +  creatureName);
         MindViewer mv = new MindViewer(a1,"MindViewer - AgentCSTCore " + creatureName, a1.behavioralCodelets);
@@ -43,7 +43,7 @@ public class ExperimentMain {
      * @param args
      */
     public static void main(String[] args) {
-            ExperimentMain em = new ExperimentMain("grow");
+            ExperimentMain em = new ExperimentMain("grow-food");
     }
 
 }

@@ -54,6 +54,7 @@ public class GoToClosestApple extends Codelet {
 
 	@Override
 	public void proc() {
+                System.out.println("Executing proc gotoclosestapple");
 		// Find distance between creature and closest apple
 		//If far, go towards it
 		//If close, stops
@@ -84,17 +85,17 @@ public class GoToClosestApple extends Codelet {
 
 			double distance = pSelf.distance(pApple);
 			//JSONObject message=new JSONObject();
-                        Idea message = Idea.createIdea("message","", Idea.guessType("Property",null,1.0,0.5));
+                        Idea message = Idea.createIdea(MESSAGE,"", Idea.guessType("Property",null,1.0,0.5));
 			try {
 				if(distance>reachDistance){ //Go to it
-                                        message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",null,1.0,0.5)));
+                                        message.add(Idea.createIdea(ACTION,GOTO, Idea.guessType("Property",null,1.0,0.5)));
                                         message.add(Idea.createIdea("X",(int)appleX, Idea.guessType("Property",null,1.0,0.5)));
                                         message.add(Idea.createIdea("Y",(int)appleY, Idea.guessType("Property",null,1.0,0.5)));
                                         message.add(Idea.createIdea("SPEED",creatureBasicSpeed, Idea.guessType("Property",null,1.0,0.5)));
                                         activation=1.0;
 
 				}else{//Stop
-                                        message.add(Idea.createIdea("ACTION","GOTO", Idea.guessType("Property",null,1.0,0.5)));
+                                        message.add(Idea.createIdea(ACTION,GOTO, Idea.guessType("Property",null,1.0,0.5)));
                                         message.add(Idea.createIdea("X",(int)appleX, Idea.guessType("Property",null,1.0,0.5)));
                                         message.add(Idea.createIdea("Y",(int)appleY, Idea.guessType("Property",null,1.0,0.5)));
                                         message.add(Idea.createIdea("SPEED",0, Idea.guessType("Property",null,1.0,0.5)));

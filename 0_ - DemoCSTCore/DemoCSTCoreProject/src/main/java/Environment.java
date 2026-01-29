@@ -31,30 +31,27 @@ import ws3dproxy.util.Logger;
  */
 public final class Environment {
     
+    public String host="localhost";
+    public int port = 4011;
     public String robotID="r0";
     public Creature c = null;
-    private String growOption;
     
-    public Environment(String growOption) {
-        this.growOption = growOption;
-        WS3DProxy proxy = new WS3DProxy();
-        try {   
-           World w = World.getInstance();
-           w.reset();
-           World.createFood(0, 350, 75);
-           World.createFood(0, 100, 220);
-           World.createFood(0, 250, 210);
-           c = proxy.createCreature(100,450,0,0);
-           c.start();
-           if(!growOption.equals("")) {
-               grow(w,7);
-           }
-           
-        } catch (CommandExecException e) {
-
-        }
-        System.out.println("Robot "+c.getName()+" is ready to go.");
-    }
+    public Environment() {
+          WS3DProxy proxy = new WS3DProxy();
+          try {   
+             World w = World.getInstance();
+             w.reset();
+             World.createFood(0, 350, 75);
+             World.createFood(0, 100, 220);
+             World.createFood(0, 250, 210);
+             c = proxy.createCreature(100,450,0,0);
+             c.start();
+             grow(w,7);
+          } catch (CommandExecException e) {
+              
+          }
+          System.out.println("Robot "+c.getName()+" is ready to go.");
+	}
     
     public synchronized void grow(World w, int time) {
         try {
@@ -62,7 +59,7 @@ public final class Environment {
                 time = Constants.TIMEFRAME;
             }
             w.getDimensionAndDeliverySpot();
-            ResourcesGenerator rg = new ResourcesGenerator(time, w.getEnvironmentWidth(), w.getEnvironmentHeight(), w.getDeliverySpot().getX(), w.getDeliverySpot().getY(), growOption);
+            ResourcesGenerator rg = new ResourcesGenerator(time, w.getEnvironmentWidth(), w.getEnvironmentHeight(), w.getDeliverySpot().getX(), w.getDeliverySpot().getY());
             rg.start();
         } catch (CommandExecException ex) {
             Logger.logException(World.class.getName(), ex);

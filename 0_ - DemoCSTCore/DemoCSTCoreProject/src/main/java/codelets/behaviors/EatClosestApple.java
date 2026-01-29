@@ -61,6 +61,7 @@ public class EatClosestApple extends Codelet {
 
 	@Override
 	public void proc() {
+            System.out.println("Executing proc eat closest apple");
                 String appleName="";
                 closestApple = (Thing) closestAppleMO.getI();
                 cis = (Idea) innerSenseMO.getI();
@@ -96,8 +97,8 @@ public class EatClosestApple extends Codelet {
 			JSONObject message=new JSONObject();
 			try {
 				if(distance<=reachDistance){ //eat it						
-					message.put("OBJECT", appleName);
-					message.put("ACTION", "EATIT");
+					message.put(OBJECT, appleName);
+					message.put(ACTION, EATIT);
 					handsMO.setI(message.toString());
                                         activation=1.0;
                                         DestroyClosestApple();
@@ -112,8 +113,11 @@ public class EatClosestApple extends Codelet {
 				e.printStackTrace();
 			}
 		}else{
-			handsMO.setI("");	//nothing
+                    if(handsMO.getI() != ""){
+                        handsMO.setI("");	//nothing
                         activation=0.0;
+                    }
+			
 		}
         //System.out.println("Before: "+known.size()+ " "+known);
         
@@ -139,6 +143,7 @@ public class EatClosestApple extends Codelet {
              }   
              if (r != -1) known.remove(r);
              closestApple = null;
+             knownMO.setI(known);
            }
         }
 

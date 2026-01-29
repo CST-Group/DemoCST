@@ -1,4 +1,4 @@
-package support;
+package MindViewerTest;
 
 ///This is how to use it
 //import SoarBridge.NativeUtils;

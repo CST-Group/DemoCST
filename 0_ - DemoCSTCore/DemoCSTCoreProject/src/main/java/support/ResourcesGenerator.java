@@ -39,51 +39,34 @@ public class ResourcesGenerator extends Thread {
     private double width;
     private double height;
     private WorldPoint dsLocation;
-    private String growOption;
 
-    public ResourcesGenerator(int timeframe, double envWidth, double envHeight, double xDS, double yDS, String growOption) {
+    public ResourcesGenerator(int timeframe, double envWidth, double envHeight, double xDS, double yDS) {
         super("ResourcesGenerator");
         if (timeframe == 0) timeInMinutes = Constants.TIMEFRAME;
         else timeInMinutes = timeframe;
         width = envWidth;
         height = envHeight;
         dsLocation = new WorldPoint(xDS,yDS); //delivery spot
-        this.growOption = growOption;
-        
     }
 
     public void run() {
         while (true) {
             try {
-                switch(growOption) {
-                    case "grow":
-                        for (int jewelType = 0; jewelType < 6; jewelType++) {
-                            generateJewel(jewelType);
-                        }
-                        generateFood(0);
-                        break;
-                    case "grow-food":
-                        generateFood(0);
-                        break;
-                    case "grow-jewel":
-                        for (int jewelType = 0; jewelType < 6; jewelType++) {
-                            generateJewel(jewelType);
-                        }
-                        break;
-                    default:
-                        break;
-                }
                 //System.out.println(".......ResourcesGenerator cycle running.........");
 
                 //generate food
                 //perishable
-                
+                generateFood(0);
                 //non-perishable
                 //generateFood(1);
                 ///generate jewels
+                //for (int jewelType = 0; jewelType < 6; jewelType++) {
+                //    generateJewel(jewelType);
+                //}
+
                 //System.out.println("..............ResourcesGenerator SLEEPING........");
                 //Thread.sleep(timeInMinutes * 60000);
-                Thread.sleep(timeInMinutes * 60000);
+                Thread.sleep(timeInMinutes * 1000);
 
             } catch (Exception ex) {
                 ex.printStackTrace();

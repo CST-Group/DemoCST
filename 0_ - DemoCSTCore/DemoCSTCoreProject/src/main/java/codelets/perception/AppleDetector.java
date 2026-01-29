@@ -56,6 +56,7 @@ public class AppleDetector extends Codelet {
 
 	@Override
 	public void proc() {
+            System.out.println("Executing proc AppleDetector");
             CopyOnWriteArrayList<Thing> vision;
             List<Thing> known;
             synchronized (visionMO) {
@@ -75,18 +76,16 @@ public class AppleDetector extends Codelet {
                           }
                        if (found == false && t.getName().contains("PFood") && !t.getName().contains("NPFood")) known.add(t);
                     }
-               
                  }
                }
             }
+            knownApplesMO.setI(known);
 	}// end proc
         
         @Override
         public void calculateActivation() {
         
         }
-
-
 }//end class
 
 

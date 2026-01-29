@@ -26,6 +26,7 @@ import br.unicamp.cst.core.entities.MemoryObject;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import static support.Constants.*;
 import ws3dproxy.model.Thing;
 
 /** 
@@ -35,7 +36,7 @@ import ws3dproxy.model.Thing;
  * 
  */
 
-public class Forage extends Codelet {
+public class Explore extends Codelet {
     
         private Memory knownMO;
         private List<Thing> known;
@@ -45,34 +46,32 @@ public class Forage extends Codelet {
 	/**
 	 * Default constructor
 	 */
-	public Forage(){
-            this.name = "Forage";
+	public Explore(){
+            this.name = "Explore";
 	}
 
 	@Override
 	public void proc() {
+            System.out.println("Executing proc explore");
             known = (List<Thing>) knownMO.getI();
             if (known.size() == 0) {
-		JSONObject message=new JSONObject();
-			try {
-				message.put("ACTION", "FORAGE");
-                                activation=1.0;
-				legsMO.setI(message.toString(),activation,name);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                activation=1.0;
             }
             else activation=0.0;
             JSONObject message=new JSONObject();
-            message.put("ACTION", "FORAGE");
-            legsMO.setI(message.toString(),activation,name);		
+            message.put(ACTION, EXPLORE);
+            if(legsMO.getI() == message.toString() &&  legsMO.getEvaluation() == activation) {
+                System.out.println("Nothing changed explore");
+            } else {
+                legsMO.setI(message.toString(),activation,name);		
+            }
+            
 	}
 
 	@Override
 	public void accessMemoryObjects() {
-            knownMO = (MemoryObject)this.getInput("KNOWN_APPLES");
-            legsMO = (MemoryContainer)this.getOutput("LEGS");
+            knownMO = (MemoryObject)this.getInput(KNOWN_APPLES);
+            legsMO = (MemoryContainer)this.getOutput(LEGS);
 	}
         
         @Override

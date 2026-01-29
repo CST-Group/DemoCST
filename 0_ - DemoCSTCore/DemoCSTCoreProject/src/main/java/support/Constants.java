@@ -18,6 +18,14 @@ public class Constants {
     public static final String HANDS = "HANDS";
     public static final String LEGS = "LEGS";
     public static final String INNER = "INNER";
+    public static final String OBJECT = "OBJECT";
+    public static final String ACTION = "ACTION";
+    public static final String PICKUP = "PICKUP";
+    public static final String EATIT = "EATIT";
+    public static final String GOTO = "GOTO";
+    public static final String BURY = "BURY";
+    public static final String EXPLORE = "EXPLORE";
+    public static final String MESSAGE = "message";
     public static final String VISION_MO = "VISION_MO";
     public static final String THINGS_KNOWN_MO = "THINGS_IN_KNOWN_MO";
     public static final String THINGS_KNOWN_IDEA = "THINGS_IN_KNOWN_IDEA";

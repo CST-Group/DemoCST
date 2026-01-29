@@ -26,6 +26,7 @@ import br.unicamp.cst.representation.idea.Idea;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
+import static support.Constants.INNER;
 import ws3dproxy.model.Creature;
 
 
@@ -47,11 +48,12 @@ public class InnerSense extends Codelet {
 	}
 	@Override
 	public void accessMemoryObjects() {
-		innerSenseMO=(MemoryObject)this.getOutput("INNER");
+		innerSenseMO=(MemoryObject)this.getOutput(INNER);
                 cis = (Idea) innerSenseMO.getI();
 	}
 	
 	public void proc() {
+            System.out.println("Executing proc innersense");
              cis.get("position.x").setValue(c.getPosition().getX());
              cis.get("position.y").setValue(c.getPosition().getY());
              cis.get("pitch").setValue(c.getPitch());
@@ -77,7 +79,4 @@ public class InnerSense extends Codelet {
         public void calculateActivation() {
         
         }
-
-
-
 }

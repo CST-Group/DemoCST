@@ -28,6 +28,7 @@ import br.unicamp.cst.core.entities.Memory;
 import br.unicamp.cst.core.entities.MemoryObject;
 import java.util.Random;
 import java.util.logging.Logger;
+import static support.Constants.*;
 import ws3dproxy.model.Creature;
 
 /**
@@ -47,79 +48,62 @@ public class HandsActionCodelet extends Codelet{
         static Logger log = Logger.getLogger(HandsActionCodelet.class.getCanonicalName());
 
 	public HandsActionCodelet(Creature nc) {
-                c = nc;
-                this.name = "HandsActionCodelet";
+            c = nc;
+            this.name = "HandsActionCodelet";
 	}
 	
         @Override
 	public void accessMemoryObjects() {
-		handsMO=(MemoryObject)this.getInput("HANDS");
+            handsMO=(MemoryObject)this.getInput(HANDS);
 	}
 	public void proc() {
-            
-                String command = (String) handsMO.getI();
+            System.out.println("Executing proc Hands");
+            String command = (String) handsMO.getI();
 
-		if(!command.equals("") && (!command.equals(previousHandsAction))){
-			JSONObject jsonAction;
-			try {
-				jsonAction = new JSONObject(command);
-				if(jsonAction.has("ACTION") && jsonAction.has("OBJECT")){
-					String action=jsonAction.getString("ACTION");
-					String objectName=jsonAction.getString("OBJECT");
-					if(action.equals("PICKUP")){
-                                                try {
-                                                 c.putInSack(objectName);
-                                                } catch (Exception e) {
-                                                    
-                                                } 
-						log.info("Sending Put In Sack command to agent:****** "+objectName+"**********");							
-						
-						
-						//							}
-					}
-					if(action.equals("EATIT")){
-                                                try {
-                                                 c.eatIt(objectName);
-                                                } catch (Exception e) {
-                                                    
-                                                }
-						log.info("Sending Eat command to agent:****** "+objectName+"**********");							
-					}
-					if(action.equals("BURY")){
-                                                try {
-                                                 c.hideIt(objectName);
-                                                } catch (Exception e) {
-                                                    
-                                                }
-						log.info("Sending Bury command to agent:****** "+objectName+"**********");							
-					}
-				}
-//                                else if (jsonAction.has("ACTION")) {
-//                                    int x=0,y=0;
-//                                    String action=jsonAction.getString("ACTION");
-//                                    if(action.equals("FORAGE")){
-//                                                try {
-//                                                      x = r.nextInt(600);
-//                                                      y = r.nextInt(800);
-//                                                 c.moveto(1, x,y );
-//                                                } catch (Exception e) {
-//                                                    
-//                                                }
-//						System.out.println("Sending Forage command to agent:****** ("+x+","+y+") **********");							
-//					}
-//                                }
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+            if(!command.equals("") && (!command.equals(previousHandsAction))){
+                JSONObject jsonAction;
+                try {
+                    jsonAction = new JSONObject(command);
+                    if(jsonAction.has(ACTION) && jsonAction.has(OBJECT)){
+                        String action=jsonAction.getString(ACTION);
+                        String objectName=jsonAction.getString(OBJECT);
+                        if(action.equals(PICKUP)){
+                            try {
+                             c.putInSack(objectName);
+                            } catch (Exception e) {
 
-		}
+                            } 
+                            log.info("Sending Put In Sack command to agent:****** "+objectName+"**********");							
+                        }
+                        if(action.equals(EATIT)){
+                            try {
+                             c.eatIt(objectName);
+                            } catch (Exception e) {
+
+                            }
+                            System.out.println("Sending Eat command to agent:****** "+objectName+"**********");							
+                        }
+                        if(action.equals(BURY)){
+                            try {
+                             c.hideIt(objectName);
+                            } catch (Exception e) {
+
+                            }
+                            log.info("Sending Bury command to agent:****** "+objectName+"**********");							
+                        }
+                    }
+                } catch (JSONException e) {
+                        e.printStackTrace();
+                }
+
+            }
 //		System.out.println("OK_hands");
-		previousHandsAction = (String) handsMO.getI();
+            previousHandsAction = (String) handsMO.getI();
 	}//end proc
 
     @Override
     public void calculateActivation() {
-        
+        activation = 0.9d;
     }
 
 

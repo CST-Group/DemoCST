@@ -53,20 +53,18 @@ public class Vision extends Codelet{
 
 	@Override
 	public void proc() {
+            System.out.println("Executing proc vision");
             c.updateState();
             synchronized (visionMO) {
                 List<Thing> lt = c.getThingsInVision();
                 visionMO.setI(lt);
             }
-             
 	}//end proc()
 
 	@Override
 	public void calculateActivation() {
 
 	}
-
-
 
 }// class end		
 

@@ -47,44 +47,41 @@ public class ClosestAppleDetector extends Codelet {
             this.name = "ClosestAppleDetector";
 	}
 
-
 	@Override
 	public void accessMemoryObjects() {
 		this.knownMO=(MemoryObject)this.getInput(KNOWN_APPLES);
 		this.innerSenseMO=(MemoryObject)this.getInput(INNER);
 		this.closestAppleMO=(MemoryObject)this.getOutput(CLOSEST_APPLE);	
 	}
+        
 	@Override
 	public void proc() {
-                Thing closest_apple=null;
-                known = Collections.synchronizedList((List<Thing>) knownMO.getI());
-                Idea cis = (Idea) innerSenseMO.getI();
-                synchronized(known) {
-		   if(known.size() != 0){
-			//Iterate over objects in vision, looking for the closest apple
-                        CopyOnWriteArrayList<Thing> myknown = new CopyOnWriteArrayList<>(known);
-                        for (Thing t : myknown) {
-				String objectName=t.getName();
-				if(objectName.contains("PFood") && !objectName.contains("NPFood")){ //Then, it is an apple
-                                        if(closest_apple == null){    
-                                                closest_apple = t;
-					}
-                                        else {
-						double Dnew = calculateDistance(t.getX1(), t.getY1(), (double)cis.get("position.x").getValue(), (double)cis.get("position.y").getValue());
-                                                double Dclosest= calculateDistance(closest_apple.getX1(), closest_apple.getY1(), (double)cis.get("position.x").getValue(), (double)cis.get("position.y").getValue());
-						if(Dnew<Dclosest){
-                                                        closest_apple = t;
-						}
-					}
-				}
-			}
-		   }
-                }
-//                if (closest_apple != null)
-//                   System.out.println("Closest apple: "+closest_apple.getName()+" known: "+known.size());
-//                else
-//                   System.out.println("Closest apple: null"+" known: "+known.size()); 
-                closestAppleMO.setI(closest_apple);
+            System.out.println("Executing proc ClosestAppleDetector");
+            Thing closest_apple=null;
+            known = Collections.synchronizedList((List<Thing>) knownMO.getI());
+            Idea cis = (Idea) innerSenseMO.getI();
+            synchronized(known) {
+               if(known.size() != 0){
+                    //Iterate over objects in vision, looking for the closest apple
+                    CopyOnWriteArrayList<Thing> myknown = new CopyOnWriteArrayList<>(known);
+                    for (Thing t : myknown) {
+                        String objectName=t.getName();
+                        if(objectName.contains("PFood") && !objectName.contains("NPFood")){ //Then, it is an apple
+                            if(closest_apple == null){    
+                                closest_apple = t;
+                            }
+                            else {
+                                double Dnew = calculateDistance(t.getX1(), t.getY1(), (double)cis.get("position.x").getValue(), (double)cis.get("position.y").getValue());
+                                double Dclosest= calculateDistance(closest_apple.getX1(), closest_apple.getY1(), (double)cis.get("position.x").getValue(), (double)cis.get("position.y").getValue());
+                                if(Dnew<Dclosest){
+                                        closest_apple = t;
+                                }
+                            }
+                        }
+                    }
+               }
+            }
+            closestAppleMO.setI(closest_apple);
 	}//end proc
 
 @Override
