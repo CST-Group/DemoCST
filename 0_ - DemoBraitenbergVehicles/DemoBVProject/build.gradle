@@ -1,0 +1,33 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven {
+        url "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
+    }
+    maven {
+        url "https://cst-group.github.io/cst-dependencies/maven-repo/"
+    }
+}
+
+dependencies {
+    // Use JUnit test framework.
+    testImplementation 'junit:junit:4.13.2'
+
+    // This dependency is used by the application.
+    //implementation 'com.github.CST-Group:cst:1.4.1'
+    //implementation 'com.github.CST-Group:cst-desktop:1.0.6'
+    implementation 'com.github.CST-Group:cst-desktop:1.1.0'
+    implementation group: 'org.zeromq', name: 'jeromq', version:'0.5.2'
+    implementation group: 'co.nstant.in', name: 'cbor', version:'0.9'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'actionselection.Main'
+}

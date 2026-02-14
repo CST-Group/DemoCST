@@ -1,0 +1,41 @@
+################################  CONFIGURATION ################################
+watch 5
+
+
+###################################  PROPOSE RULES  ###################################
+
+sp {propose*init
+    (state <s> ^superstate nil
+               -^name)
+-->
+    (<s> ^operator <op> + =)
+    (<op> ^name initSmem)
+}
+
+sp {apply*init
+   (state <s> ^operator.name initSmem)
+-->
+   (<s> ^name initSmem)
+}
+
+sp {propose*createOutput
+    (state <s> ^name initSmem)
+-->
+    (<s> ^operator <op> + =)
+    (<op> ^name createOutput)
+}
+
+sp {apply*createOutput
+   (state <s> ^operator.name createOutput
+              ^io <io>)
+   (<io> ^input-link <il>
+         ^output-link <ol>)
+   (<il> ^CREATURE <creature>)
+   (<creature> ^NAME <name>)
+-->
+   (<s> ^name initPlans)
+   (<ol> ^SoarPlan <att>)
+   (<att> ^Name <name>)
+
+   (halt)
+}
