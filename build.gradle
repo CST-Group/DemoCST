@@ -7,7 +7,7 @@ application {
     mainClass = 'ExperimentMain'
 }
 
-version = '0.0.4'
+version = '0.0.5'
 
 // 'sourceCompatibility' simples ainda funciona, mas a forma recomendada é via java {}
 java {
@@ -26,11 +26,11 @@ tasks.withType(JavaCompile).configureEach {
 repositories {
     mavenCentral()
     maven {
-        url "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
+        url = "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
     }
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://jitpack.io' }
     maven {
-        url 'https://cst-group.github.io/cst-dependencies/maven-repo/'
+        url = 'https://cst-group.github.io/cst-dependencies/maven-repo/'
     }
 }
 
